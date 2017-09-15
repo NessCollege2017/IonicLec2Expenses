@@ -7,12 +7,45 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>{{expense.description}}</ion-title>
+    <ion-title>{{expense.description || 'New Expense'}}</ion-title>
+    <ion-buttons end>
+          <button ion-button icon-only (click)="apply()">
+            <ion-icon name="checkmark" color="primary"></ion-icon>
+          </button>
+
+          <button *ngIf="expense.id" ion-button icon-only (click)="trash()">
+              <ion-icon name="trash" color="primary"></ion-icon>
+          </button>
+      </ion-buttons>
   </ion-navbar>
 
 </ion-header>
 
 
 <ion-content padding>
+  <ion-list>
+    
+    <ion-item>
+      <ion-label floating>Amount</ion-label>
+      <ion-input type="number" [(ngModel)]="expense.amount"></ion-input>
+    </ion-item>
 
+    <ion-item>
+      <ion-label floating>Description</ion-label>
+      <ion-input type="text" [(ngModel)]="expense.description"></ion-input>
+    </ion-item>
+    
+    <ion-item>
+      <ion-label stacked>Category</ion-label>
+      <ion-select [(ngModel)]="expense.category">
+          <ion-option *ngFor="let category of categories" value="{{category}}">{{category}}</ion-option>
+      </ion-select>
+    </ion-item>
+    
+    <ion-item>
+        <ion-label floating>Date</ion-label>
+        <ion-datetime displayFormat="DD/MM/YYYY" pickerFormat="DD MMM YYYY" [(ngModel)]="expense.date"></ion-datetime>
+   </ion-item>
+
+    </ion-list>
 </ion-content>

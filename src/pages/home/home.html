@@ -9,9 +9,15 @@
 <ion-content padding>
   <ion-list>
     <button ion-item  (click)="details(expense)" *ngFor="let expense of expenses;index as i;first as isFirst">
-      <h2>{{expense.amount|currency:'ILS':true}}</h2>
-      <p>{{expense.date | date: 'd/MM/yy'}} - {{expense.description}}</p>
+      <h2>{{(expense.amount || 0) | currency:'ILS':true}}</h2>
+      <p>{{(expense.date || '') | date: 'd/MM/yy'}} - {{expense.description}}</p>
       <ion-note item-right>{{expense.category}}</ion-note>
     </button>
   </ion-list>
+
+
+  <ion-fab right bottom>
+      <button (click)="newExpense()" ion-fab color="primary"><ion-icon name="add"></ion-icon></button>
+  </ion-fab>
+
 </ion-content>

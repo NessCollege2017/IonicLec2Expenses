@@ -1,3 +1,5 @@
+import { Expense } from './../../app/expense.model';
+import { ExpensesService } from './../../app/expenses.service';
 
 import {Component} from '@angular/core';
 import {NavController} from 'ionic-angular';
@@ -9,32 +11,24 @@ import {DetailsPage} from '../details/details';
 })
 export class HomePage {
 
-  constructor(public navCtrl: NavController) {}
-  expenses = [{
-      id: 1,
-      amount: 10,
-      description: 'Le Big Mac',
-      category: 'Food',
-      date: '2017/09/12'
-    },
-    {
-      id: 2,
-      amount: 10.0012,
-      description: 'Train Ticket',
-      category: 'Transport',
-      date: '2017/09/12'
-    },
-    {
-      id: 3,
-      amount: 1,
-      description: 'Bamba',
-      category: 'Food',
-      date: '2017/09/11'
-    },
-  ]
+  constructor(public navCtrl: NavController, private expenseService: ExpensesService) {
+    this.expenses = this.expenseService.expenses
+  }
+  expenses:[Expense] 
 
   details(expense) {
-    let bundle = {expense: expense}
+    let copy = Object.assign({}, expense)
+
+    let bundle = {'expense': copy}
+    this.navCtrl.push(DetailsPage, bundle)
+  }
+
+  newExpense(){
+    // We don't know the id for a new item yet.
+    // once it's created, the service will assign it the id.
+    
+    let expense:Expense  = {amount:1, category:"Other", date:new Date().toISOString(), description:""}
+    let bundle = {'expense': expense}
     this.navCtrl.push(DetailsPage, bundle)
   }
 }
