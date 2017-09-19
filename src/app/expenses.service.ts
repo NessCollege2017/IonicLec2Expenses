@@ -31,7 +31,6 @@ export class ExpensesService{
                 expenseWithoutID['id'] = key
                 return expenseWithoutID
         })
-        console.log(expenses)
       return expenses
      })
     }
