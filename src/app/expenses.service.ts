@@ -1,30 +1,15 @@
 import { Expense } from './expense.model';
+import uuidv1 from 'uuid/v1'
+
 export class ExpensesService{
 
+  
     categories:[string] = ["Food", "Travel", "Other"]
 
-    expenses:[Expense] = [{
-        id: 1,
-        amount: 10,
-        description: 'Le Big Mac',
-        category: 'Food',
-        date: '2017-09-12'
-      },
-      {
-        id: 2,
-        amount: 10,
-        description: 'Train Ticket',
-        category: 'Transport',
-        date: '2017-09-12'
-      },
-      {
-        id: 3,
-        amount: 1,
-        description: 'Bamba',
-        category: 'Food',
-        date: '2017-09-11'
-      }
-    ]
+    expenses:Expense[] = []//new Array<Expense>()
+    constructor(){
+      this.reloadAll();
+    }
 
     findIndex(expense:Expense):number{
        let idx = this.expenses.findIndex((e)=>{return e.id == expense.id})
@@ -34,20 +19,40 @@ export class ExpensesService{
     updateExpense(expense:Expense){
       let idx = this.findIndex(expense)
       this.expenses[idx] = expense;
+      this.saveAndReload()
     }
-    idx = 4
+
     newExpense(expense:Expense){
       //let new id...
-      let id = this.idx++
+      let id = uuidv1()
       
       //assign the id to the given parameter expense
       expense.id = id
       //save(push) it to the array.
       this.expenses.push(expense)
+      this.saveAndReload()
+      //localStoarge only takes strings....
     }
 
     trash(expense:Expense){
       let idx = this.findIndex(expense)
       this.expenses.splice(idx, 1)
+      this.saveAndReload()
+    }
+
+    saveAll(){
+      let jsonString = JSON.stringify(this.expenses)
+      //setItem(string, string) like sharedPrefs in android
+      localStorage.setItem('expenses', jsonString)
+    }
+
+    reloadAll(){
+      let all = localStorage.getItem('expenses')
+      this.expenses = JSON.parse(all)
+    }
+
+    saveAndReload(){
+      this.saveAll()
+      this.reloadAll()
     }
 }

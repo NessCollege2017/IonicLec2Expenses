@@ -5,6 +5,7 @@ import {Component} from '@angular/core';
 import {NavController} from 'ionic-angular';
 import {DetailsPage} from '../details/details';
 
+
 @Component({
   selector: 'page-home',
   templateUrl: 'home.html'
@@ -14,7 +15,7 @@ export class HomePage {
   constructor(public navCtrl: NavController, private expenseService: ExpensesService) {
     this.expenses = this.expenseService.expenses
   }
-  expenses:[Expense] 
+  expenses:Expense[] 
 
   details(expense) {
     let copy = Object.assign({}, expense)
@@ -30,6 +31,11 @@ export class HomePage {
     let expense:Expense  = {amount:1, category:"Other", date:new Date().toISOString(), description:""}
     let bundle = {'expense': expense}
     this.navCtrl.push(DetailsPage, bundle)
+  }
+
+  ionViewWillEnter(){
+   console.log(this.expenses)
+   this.expenses = this.expenseService.expenses
   }
 }
 // iso 8601 yyyy-mm-dd
