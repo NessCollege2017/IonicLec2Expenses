@@ -1,48 +1,47 @@
-import  Dexie  from 'dexie';
+
 import { Expense } from './expense.model';
-import uuidv1 from 'uuid/v1'
+import { Injectable } from '@angular/core';
+import { Http } from '@angular/http';
+import 'rxjs/add/operator/toPromise';
 
-export class ExpensesService extends Dexie{
-
+ export const url = 'https://ionic-dev-ebb25.firebaseio.com/expenses.json'
+@Injectable()
+export class ExpensesService{
+ // url = 'https://ionic-dev-ebb25.firebaseio.com/expenses.json'
+  constructor(private http: Http){
+  }
   // Declare implicit table properties.
   // (just to inform Typescript. Instanciated by Dexie in stores() method)
-  expenses:Dexie.Table<Expense, string> // number = type of the primkey
-  
-  constructor () {
-    super("expense-tracker"); //DB Name:
-    this.version(1).stores({ //DB Version
-        expenses: 'id, date',/* TableName: indexOn: only the indexed columns */
-        //...other tables goes here...
-    });
-}
-
+  expenses:Expense[] = [] 
     categories:[string] = ["Food", "Travel", "Other"]
 
-
-    newExpense(expense:Expense):Dexie.Promise<string>{
-      //let new id...
-      let id = uuidv1()
-      expense.id = id
-      //Table object:
-      return this.expenses.add(expense)
+    newExpense(expense:Expense){
+      let expenseJson = JSON.stringify(expense)
+      this.http.post(url, expenseJson).toPromise().then(response =>{
+        console.log(response)
+      })
     }
 
-    //Expense[]...Dexie.Promise<Expense[]>
-    //Promise you won't callback
-    getExpenses():Dexie.Promise<Expense[]>{
-      return this.expenses.toArray()
+    getExpenses():Promise<Expense[]>{
+     return  this.http.get(url).toPromise().then(response=>{
+        let json = response.json()
+        let keys:string[] = Object.keys(json)
+        let expenses: Expense[] = keys.map(key => {
+                let expenseWithoutID =  json[key]
+                expenseWithoutID['id'] = key
+                return expenseWithoutID
+        })
+        console.log(expenses)
+      return expenses
+     })
     }
-
-    getExpense(id:string):Dexie.Promise<Expense>{
-      return this.expenses.get(id)
+    getExpense(id:string){
+      return null
     }
-
-    trash(expense:Expense):Dexie.Promise<void>{
-      return this.expenses.delete(expense.id)
+    trash(expense:Expense){
+      return null
      }
-
-    updateExpense(expense:Expense):Dexie.Promise<number>{
-      return this.expenses.update(expense.id, expense) 
+    updateExpense(expense:Expense){
+      return null
     }
-
 }

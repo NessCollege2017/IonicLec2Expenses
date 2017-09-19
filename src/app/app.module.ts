@@ -1,3 +1,4 @@
+
 import { BrowserModule } from '@angular/platform-browser';
 import { ErrorHandler, NgModule } from '@angular/core';
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
@@ -8,6 +9,7 @@ import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
 import { DetailsPage } from '../pages/details/details';
 import { ExpensesService } from './expenses.service'; 
+import { HttpModule } from '@angular/http';
 
 @NgModule({
   declarations: [
@@ -17,7 +19,8 @@ import { ExpensesService } from './expenses.service';
   ],
   imports: [
     BrowserModule,
-    IonicModule.forRoot(MyApp)
+    IonicModule.forRoot(MyApp),
+    HttpModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -30,7 +33,7 @@ import { ExpensesService } from './expenses.service';
     StatusBar,
     SplashScreen,
     ExpensesService,
-    {provide: ErrorHandler, useClass: IonicErrorHandler}
+    {provide: ErrorHandler, useClass: IonicErrorHandler},
   ]
 })
 export class AppModule {}
