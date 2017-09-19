@@ -19,26 +19,30 @@ export class ExpensesService extends Dexie{
     categories:[string] = ["Food", "Travel", "Other"]
 
 
-    getExpenses():Expense[]{
-      //TODO:
-      return new Array<Expense>()
-    }
-    findIndex(expense:Expense):number{
-      //TODO: 
-       return null
-    }
-
-    updateExpense(expense:Expense){
-          //TODO: 
-    }
-
-    newExpense(expense:Expense){
+    newExpense(expense:Expense):Dexie.Promise<string>{
       //let new id...
       let id = uuidv1()
-     //TODO:
+      expense.id = id
+      //Table object:
+      return this.expenses.add(expense)
     }
 
-    trash(expense:Expense){
-     //TODO:
+    //Expense[]...Dexie.Promise<Expense[]>
+    //Promise you won't callback
+    getExpenses():Dexie.Promise<Expense[]>{
+      return this.expenses.toArray()
     }
+
+    getExpense(id:string):Dexie.Promise<Expense>{
+      return this.expenses.get(id)
+    }
+
+    trash(expense:Expense):Dexie.Promise<void>{
+      return this.expenses.delete(expense.id)
+     }
+
+    updateExpense(expense:Expense):Dexie.Promise<number>{
+      return this.expenses.update(expense.id, expense) 
+    }
+
 }

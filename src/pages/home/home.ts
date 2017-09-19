@@ -12,10 +12,8 @@ import {DetailsPage} from '../details/details';
 })
 export class HomePage {
 
-  constructor(public navCtrl: NavController, private expenseService: ExpensesService) {
-    this.expenses = this.expenseService.getExpenses() //Dexie.Table<...>
-  }
-  expenses:Expense[] 
+  constructor(public navCtrl: NavController, private expenseService: ExpensesService) {}
+  expenses:Expense[] = []
 
   details(expense) {
     let copy = Object.assign({}, expense)
@@ -34,7 +32,9 @@ export class HomePage {
   }
 
   ionViewWillEnter(){
-    
+    this.expenseService.getExpenses().then(expenses => {
+      this.expenses = expenses
+    })
   }
 }
 // iso 8601 yyyy-mm-dd
