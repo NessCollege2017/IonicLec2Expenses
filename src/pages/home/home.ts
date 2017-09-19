@@ -13,7 +13,7 @@ import {DetailsPage} from '../details/details';
 export class HomePage {
 
   constructor(public navCtrl: NavController, private expenseService: ExpensesService) {
-    this.expenses = this.expenseService.expenses
+    this.expenses = this.expenseService.getExpenses() //Dexie.Table<...>
   }
   expenses:Expense[] 
 
@@ -34,8 +34,7 @@ export class HomePage {
   }
 
   ionViewWillEnter(){
-   console.log(this.expenses)
-   this.expenses = this.expenseService.expenses
+    
   }
 }
 // iso 8601 yyyy-mm-dd
